@@ -1,0 +1,101 @@
+=== Ultimate Integration for Contact Form 7 – Elementor Widget ===
+Contributors: nahian91
+Tags: contact form 7, elementor, widget, cf7, form builder, cf7 styler, contact form, responsive form, ajax form
+Requires at least: 5.0
+Tested up to: 6.7.1
+Requires PHP: 7.0
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Plugin URI: https://wordpress.org/plugins/nahian-ultimate-integration-for-contact-form-7-and-elementor/
+Author: Abdullah Nahian
+Author URI: https://profiles.wordpress.org/nahian91/
+Text Domain: nahian-ultimate-cf7-elementor
+Domain Path: /languages
+
+Integrate Contact Form 7 forms directly into Elementor using a dedicated widget. Drag & drop your forms, style every element, use AJAX submission, redirect users, and select from pre-built form templates.
+
+== Description ==
+
+**Contact Form 7 Widget for Elementor – Ultimate Integration** allows you to seamlessly add Contact Form 7 forms into Elementor without shortcodes. Select your form, style every element individually, and publish responsive, modern forms in minutes.
+
+**Pro-Level Features:**
+* Drag & Drop CF7 widget for Elementor
+* Select any CF7 form from dropdown
+* Full style control:
+  - Input fields, Textareas
+  - Select dropdowns
+  - Radio buttons
+  - Checkboxes
+  - Labels, placeholders
+  - Error messages & success messages
+  - Buttons (color, typography, hover, border-radius, shadow)
+  - Form container (background, padding, margin, border, box-shadow)
+* AJAX submission support
+* Optional redirect URL after submission
+* Responsive controls for all devices
+* Pre-built form templates (Contact, Subscription, Quote Request, Feedback)
+* Multi-step forms (Pro version)
+* Custom CSS class for advanced styling
+* Translation ready (WPML, Polylang compatible)
+* Lightweight & optimized for performance
+* Compatible with all Elementor themes
+* Developer-friendly hooks and filters
+
+**Why use this plugin?**
+- No shortcode copying required
+- Full Elementor integration
+- Instant form styling without custom CSS
+- Professional look for every form type
+- Save time using prebuilt templates
+
+== Installation ==
+
+1. Upload the `nahian-ultimate-cf7-elementor` folder to `/wp-content/plugins/`.
+2. Activate the plugin through WordPress 'Plugins' menu.
+3. Make sure both Elementor and Contact Form 7 are installed and activated.
+4. Edit any page with Elementor, drag the "Ultimate Contact Form 7" widget.
+5. Select the CF7 form and style it.
+6. Use prebuilt templates for quick form setup.
+
+== Frequently Asked Questions ==
+
+= Do I need Elementor and Contact Form 7 installed? =
+Yes, both plugins are required.
+
+= Can I style radio buttons, checkboxes, selects separately? =
+Yes, there are dedicated styling controls for each.
+
+= Can I redirect users after form submission? =
+Yes, provide a redirect URL in widget settings.
+
+= Does it support AJAX submission? =
+Yes, AJAX is supported and optional.
+
+= Are prebuilt templates included? =
+Yes, ready-to-use templates are included for fast setup.
+
+= Can I use this plugin with other page builders? =
+No, it only works with Elementor.
+
+== Screenshots ==
+
+1. Elementor panel: CF7 form selection
+2. Style panel: input, textarea, radio, checkbox, select, buttons
+3. Example form in Elementor page
+4. Responsive controls panel
+5. Prebuilt template selection
+
+== Changelog ==
+
+= 1.0.0 =
+* Initial release
+* Drag & drop Elementor widget
+* Full styling options for all form elements
+* AJAX submission and redirect support
+* Prebuilt form templates
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+First release. Ensure Elementor and Contact Form 7 are installed and activated.

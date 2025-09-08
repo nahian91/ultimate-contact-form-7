@@ -1,0 +1,43 @@
+.ucf7e-widget-wrapper p {
+	margin: 0;
+}
+.ucf7e-widget-wrapper .wpcf7 label br {
+	margin-bottom: 10px;
+}
+.ucf7e-widget-wrapper .wpcf7-list-item {
+	margin: 0;
+	margin-right: 10px;
+}
+
+/* Hide default checkbox */
+.ucf7e-widget-wrapper .wpcf7 input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px; /* This will now work */
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Checked state */
+.ucf7e-widget-wrapper .wpcf7 input[type="checkbox"]:checked {
+    background-color: #0073e6;
+    border-color: #0073e6;
+}
+
+/* Checkmark */
+.ucf7e-widget-wrapper .wpcf7 input[type="checkbox"]:checked::after {
+    content: '✔';
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 3px;
+    font-size: 14px;
+}
+.ucf7e-widget-wrapper .wpcf7 input[type="submit"]{
+    cursor: pointer;
+}
