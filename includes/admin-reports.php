@@ -15,22 +15,25 @@ function ucf7e_render_reports_page() {
     // Get all forms
     $forms = get_posts(['post_type'=>'wpcf7_contact_form','numberposts'=>-1]);
 
-    // Get submissions
-    $submissions = ucf7e_get_dummy_submissions();
+    // Get submissions from database
+    $submissions = get_option('ucf7e_submissions', []);
+    $submissions = is_array($submissions) ? $submissions : [];
 
     // Apply filters
+    $filtered_submissions = $submissions;
+
     if ($filter_form_id) {
-        $submissions = array_filter($submissions, fn($s) => $s['form_id'] === $filter_form_id);
+        $filtered_submissions = array_filter($filtered_submissions, fn($s) => ($s['form_id'] ?? 0) === $filter_form_id);
     }
     if ($filter_start) {
-        $submissions = array_filter($submissions, fn($s) => date('Y-m-d', strtotime($s['submitted_at'])) >= $filter_start);
+        $filtered_submissions = array_filter($filtered_submissions, fn($s) => !empty($s['submitted_at']) && date('Y-m-d', strtotime($s['submitted_at'])) >= $filter_start);
     }
     if ($filter_end) {
-        $submissions = array_filter($submissions, fn($s) => date('Y-m-d', strtotime($s['submitted_at'])) <= $filter_end);
+        $filtered_submissions = array_filter($filtered_submissions, fn($s) => !empty($s['submitted_at']) && date('Y-m-d', strtotime($s['submitted_at'])) <= $filter_end);
     }
 
     // Quick stats
-    $total = count($submissions);
+    $total = count($filtered_submissions);
 
     // Handle CSV export
     if (isset($_GET['ucf7_export_csv']) && $_GET['ucf7_export_csv'] == '1') {
@@ -38,8 +41,14 @@ function ucf7e_render_reports_page() {
         header('Content-Disposition: attachment; filename="cf7-submissions-report.csv"');
         $output = fopen('php://output', 'w');
         fputcsv($output, ['Form','Name','Email','Message','Submitted At']);
-        foreach ($submissions as $s) {
-            fputcsv($output, [$s['form_title'],$s['data']['name'],$s['data']['email'],$s['data']['msg'],$s['submitted_at']]);
+        foreach ($filtered_submissions as $s) {
+            fputcsv($output, [
+                $s['form_title'] ?? '',
+                $s['data']['name'] ?? '',
+                $s['data']['email'] ?? '',
+                $s['data']['msg'] ?? '',
+                $s['submitted_at'] ?? ''
+            ]);
         }
         fclose($output);
         exit;
@@ -89,15 +98,17 @@ function ucf7e_render_reports_page() {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($submissions as $s): ?>
+                    <?php if(empty($filtered_submissions)): ?>
+                        <tr><td colspan="5"><?php esc_html_e('No submissions found.','nahian-ultimate-cf7-elementor'); ?></td></tr>
+                    <?php else: foreach($filtered_submissions as $s): ?>
                     <tr>
-                        <td><?php echo esc_html($s['form_title']); ?></td>
-                        <td><?php echo esc_html($s['data']['name']); ?></td>
-                        <td><?php echo esc_html($s['data']['email']); ?></td>
-                        <td><?php echo esc_html($s['data']['msg']); ?></td>
-                        <td><?php echo esc_html($s['submitted_at']); ?></td>
+                        <td><?php echo esc_html($s['form_title'] ?? ''); ?></td>
+                        <td><?php echo esc_html($s['data']['name'] ?? ''); ?></td>
+                        <td><?php echo esc_html($s['data']['email'] ?? ''); ?></td>
+                        <td><?php echo esc_html($s['data']['msg'] ?? ''); ?></td>
+                        <td><?php echo esc_html($s['submitted_at'] ?? ''); ?></td>
                     </tr>
-                    <?php endforeach; ?>
+                    <?php endforeach; endif; ?>
                 </tbody>
             </table>
         </div>
