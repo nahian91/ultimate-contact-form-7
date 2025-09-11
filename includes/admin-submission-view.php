@@ -25,8 +25,23 @@ function ucf7e_render_submission_view() {
     $date = $submitted_at ? date_i18n('j F Y', $submitted_at) : '';
     $time = $submitted_at ? date_i18n('g:ia', $submitted_at) : '';
 
-    // Optional: Define mapping of field keys to CF7 labels
-    $labels = isset($s['labels']) && is_array($s['labels']) ? $s['labels'] : [];
+    // Try to fetch the form labels from the actual CF7 form
+    $labels = [];
+    if (!empty($s['form_id'])) {
+        $form = get_post($s['form_id']);
+        if ($form && $form->post_type === 'wpcf7_contact_form') {
+            $form_content = $form->post_content;
+
+            // Match patterns like: [text* your-name "Full Name"]
+            if (preg_match_all('/\[(?:\w+)(?:\*?)\s+([^\s\]]+)(?:[^\]]*?"([^"]+)")?/', $form_content, $matches, PREG_SET_ORDER)) {
+                foreach ($matches as $m) {
+                    $field_name = $m[1];
+                    $field_label = isset($m[2]) && $m[2] ? $m[2] : ucfirst(str_replace('_', ' ', $field_name));
+                    $labels[$field_name] = $field_label;
+                }
+            }
+        }
+    }
     ?>
     <div class="wrap ucf7-wrap">
         <h1><?php echo esc_html($form_title ?: __('Untitled Form', 'nahian-ultimate-cf7-elementor')); ?> - <?php esc_html_e('Submission Details', 'nahian-ultimate-cf7-elementor'); ?></h1>
@@ -37,7 +52,7 @@ function ucf7e_render_submission_view() {
                         <tr>
                             <th>
                                 <?php
-                                // Use the label if available, otherwise convert key to readable text
+                                // Prefer the extracted label, fallback to key
                                 echo esc_html($labels[$key] ?? ucfirst(str_replace('_', ' ', $key)));
                                 ?>
                             </th>
