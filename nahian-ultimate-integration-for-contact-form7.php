@@ -121,15 +121,33 @@ add_action('wpcf7_mail_sent', function($contact_form){
         $data = $submission->get_posted_data(); // All form fields
         $form_id = $contact_form->id();
         $form_title = $contact_form->title();
+        $submitted_at = current_time('mysql');
 
-        // Save in a custom option
-        $all_submissions = get_option('ucf7e_submissions', []);
-        $all_submissions[] = [
+        $new_submission = [
             'form_id'      => $form_id,
             'form_title'   => $form_title,
             'data'         => $data,
-            'submitted_at' => current_time('mysql'),
+            'submitted_at' => $submitted_at,
         ];
-        update_option('ucf7e_submissions', $all_submissions);
+
+        $all_submissions = get_option('ucf7e_submissions', []);
+        $all_submissions = is_array($all_submissions) ? $all_submissions : [];
+
+        // ✅ Create a hash of the submission (form + data + timestamp)
+        $hash_new = md5( $form_id . serialize($data) . $submitted_at );
+
+        $is_duplicate = false;
+        foreach ($all_submissions as $s) {
+            $hash_existing = md5( ($s['form_id'] ?? '') . serialize($s['data'] ?? []) . ($s['submitted_at'] ?? '') );
+            if ($hash_existing === $hash_new) {
+                $is_duplicate = true;
+                break;
+            }
+        }
+
+        if (!$is_duplicate) {
+            $all_submissions[] = $new_submission;
+            update_option('ucf7e_submissions', $all_submissions);
+        }
     }
 });
