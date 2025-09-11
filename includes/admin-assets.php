@@ -54,7 +54,7 @@ function ucf7e_enqueue_frontend_assets() {
     // Frontend CSS
     wp_enqueue_style(
         'ucf7e-frontend-style',
-        UCF7E_PLUGIN_URL . 'assets/css/frontend-style.css',
+        UCF7E_PLUGIN_URL . 'assets/css/frontned-style.css',
         [],
         '1.0.0'
     );

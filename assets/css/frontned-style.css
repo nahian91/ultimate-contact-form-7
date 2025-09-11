@@ -1,36 +1,101 @@
-.ucf7e-widget-wrapper p {
-	margin: 0;
-}
-.ucf7e-widget-wrapper .wpcf7 label br {
-	margin-bottom: 10px;
-}
-.ucf7e-widget-wrapper .wpcf7-list-item {
-	margin: 0;
-	margin-right: 10px;
+/* Wrapper */
+.ucf7e-widget-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    color: #333;
 }
 
-/* Hide default checkbox */
-.ucf7e-widget-wrapper .wpcf7 input[type="checkbox"] {
+/* Paragraph spacing */
+.ucf7e-widget-wrapper p {
+    margin: 0 0 15px;
+}
+
+/* Labels */
+.ucf7e-widget-wrapper .wpcf7 label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+/* Text Inputs, Email, URL, Tel, Password, Textarea */
+.ucf7e-widget-wrapper .wpcf7 input[type="text"],
+.ucf7e-widget-wrapper .wpcf7 input[type="email"],
+.ucf7e-widget-wrapper .wpcf7 input[type="url"],
+.ucf7e-widget-wrapper .wpcf7 input[type="tel"],
+.ucf7e-widget-wrapper .wpcf7 input[type="password"],
+.ucf7e-widget-wrapper .wpcf7 textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.ucf7e-widget-wrapper .wpcf7 input:focus,
+.ucf7e-widget-wrapper .wpcf7 textarea:focus {
+    border-color: #0073e6;
+    box-shadow: 0 0 5px rgba(0,115,230,0.3);
+}
+
+/* Select */
+.ucf7e-widget-wrapper .wpcf7 select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ucf7e-widget-wrapper .wpcf7 select:focus {
+    border-color: #0073e6;
+    box-shadow: 0 0 5px rgba(0,115,230,0.3);
+}
+
+/* Checkbox & Radio */
+.ucf7e-widget-wrapper .wpcf7-list-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+/* Hide default */
+.ucf7e-widget-wrapper .wpcf7-list-item input[type="checkbox"],
+.ucf7e-widget-wrapper .wpcf7-list-item input[type="radio"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     width: 20px;
     height: 20px;
     border: 2px solid #ccc;
-    border-radius: 4px; /* This will now work */
-    position: relative;
+    border-radius: 4px;
+    margin-right: 8px;
     cursor: pointer;
-    margin: 0;
+    position: relative;
+}
+
+/* Radio round */
+.ucf7e-widget-wrapper .wpcf7-list-item input[type="radio"] {
+    border-radius: 50%;
 }
 
 /* Checked state */
-.ucf7e-widget-wrapper .wpcf7 input[type="checkbox"]:checked {
+.ucf7e-widget-wrapper .wpcf7-list-item input[type="checkbox"]:checked,
+.ucf7e-widget-wrapper .wpcf7-list-item input[type="radio"]:checked {
     background-color: #0073e6;
     border-color: #0073e6;
 }
 
 /* Checkmark */
-.ucf7e-widget-wrapper .wpcf7 input[type="checkbox"]:checked::after {
+.ucf7e-widget-wrapper .wpcf7-list-item input[type="checkbox"]:checked::after {
     content: '✔';
     color: #fff;
     position: absolute;
@@ -38,6 +103,62 @@
     left: 3px;
     font-size: 14px;
 }
-.ucf7e-widget-wrapper .wpcf7 input[type="submit"]{
+
+.ucf7e-widget-wrapper .wpcf7-list-item input[type="radio"]:checked::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+}
+
+/* File Upload */
+.ucf7e-widget-wrapper .wpcf7 input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ucf7e-widget-wrapper .wpcf7 input[type="file"]:hover {
+    border-color: #0073e6;
+}
+
+/* Submit Button */
+.ucf7e-widget-wrapper .wpcf7 input[type="submit"] {
+    background-color: #0073e6;
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.ucf7e-widget-wrapper .wpcf7 input[type="submit"]:hover {
+    background-color: #005bb5;
+}
+
+/* Error messages */
+.ucf7e-widget-wrapper .wpcf7-not-valid-tip {
+    color: #d9534f;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Placeholder */
+.ucf7e-widget-wrapper .wpcf7 input::placeholder,
+.ucf7e-widget-wrapper .wpcf7 textarea::placeholder {
+    color: #999;
+    opacity: 1;
 }
