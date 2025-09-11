@@ -1,4 +1,13 @@
- .ucf7e-wrap { display: flex; flex-direction: column; gap: 20px; }
+.wrap.ucf7-wrap > h1 {
+	margin-bottom: 20px;
+}
+#ucf7e-submissions-datatable_length select {
+  width: 60px;
+}
+#ucf7e-submissions-datatable_length {
+  margin-bottom: 25px;
+}
+.ucf7e-wrap { display: flex; flex-direction: column; gap: 20px; }
         .ucf7e-general { display: flex; gap: 30px; flex-wrap: wrap; }
         .ucf7e-general-content { flex: 1 1 45%; }
         .ucf7e-general-support { flex: 1 1 50%; }
