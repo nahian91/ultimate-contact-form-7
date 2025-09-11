@@ -111,31 +111,22 @@ add_action('elementor/init', function() {
 
 });
 
-/* =====================
-   Dummy Submissions
-===================== */
-function ucf7e_get_dummy_submissions() {
-    $submissions = get_transient('ucf7e_dummy_submissions');
-    if ($submissions !== false && is_array($submissions)) return $submissions;
+// Capture CF7 submissions
+add_action('wpcf7_mail_sent', function($contact_form){
+    $submission = WPCF7_Submission::get_instance();
+    if ($submission) {
+        $data = $submission->get_posted_data(); // All form fields
+        $form_id = $contact_form->id();
+        $form_title = $contact_form->title();
 
-    $forms = get_posts(['post_type'=>'wpcf7_contact_form','numberposts'=>-1]);
-    if (empty($forms)) return [];
-
-    $submissions = [];
-    foreach ($forms as $form) {
-        for ($i=1; $i<=10; $i++){
-            $submissions[] = [
-                'form_id'      => $form->ID,
-                'form_title'   => $form->post_title,
-                'submitted_at' => date('Y-m-d H:i:s', strtotime("-$i days")),
-                'data'         => [
-                    'name'=>"User $i",
-                    'email'=>"user$i@example.com",
-                    'msg'=>"This is a dummy message."
-                ]
-            ];
-        }
+        // Save in a custom option
+        $all_submissions = get_option('ucf7e_submissions', []);
+        $all_submissions[] = [
+            'form_id'      => $form_id,
+            'form_title'   => $form_title,
+            'data'         => $data,
+            'submitted_at' => current_time('mysql'),
+        ];
+        update_option('ucf7e_submissions', $all_submissions);
     }
-    set_transient('ucf7e_dummy_submissions',$submissions,12*HOUR_IN_SECONDS);
-    return $submissions;
-}
+});

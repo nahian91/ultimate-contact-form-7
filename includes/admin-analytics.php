@@ -6,7 +6,8 @@ function ucf7e_render_analytics_page() {
         wp_die( esc_html__( 'You must be an admin to access this page.', 'nahian-ultimate-cf7-elementor' ) );
     }
 
-    $submissions = ucf7e_get_dummy_submissions();
+    // Load real submissions from the option
+    $submissions = get_option('ucf7e_submissions', []);
 
     $form_stats = [];
     $date_stats = [];

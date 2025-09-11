@@ -1,12 +1,14 @@
 <?php
-if ( ! defined('ABSPATH') ) exit;
+if (!defined('ABSPATH')) exit;
 
 function ucf7e_render_submissions_page() {
     if (!current_user_can('manage_options')) {
         wp_die(__('You are not allowed to access this page.','nahian-ultimate-cf7-elementor'));
     }
 
-    $submissions = function_exists('ucf7e_get_dummy_submissions') ? ucf7e_get_dummy_submissions() : [];
+    // Load real submissions
+    $submissions = get_option('ucf7e_submissions', []);
+    $submissions = is_array($submissions) ? $submissions : [];
 
     // Handle Bulk Delete
     if (isset($_POST['ucf7e_bulk_action']) && $_POST['ucf7e_bulk_action'] === 'delete') {
@@ -15,7 +17,7 @@ function ucf7e_render_submissions_page() {
                 unset($submissions[intval($idx)]);
             }
             $submissions = array_values($submissions); // reindex
-            set_transient('ucf7e_dummy_submissions', $submissions, 12*HOUR_IN_SECONDS);
+            update_option('ucf7e_submissions', $submissions);
             echo '<div class="notice notice-success"><p>'.esc_html__('Selected submissions deleted','nahian-ultimate-cf7-elementor').'</p></div>';
         }
     }
@@ -28,21 +30,14 @@ function ucf7e_render_submissions_page() {
 
     $filtered_submissions = array_filter($submissions, function($s) use ($form_filter,$month_filter,$user_type_filter,$email_search){
         $pass = true;
-        // Form Filter
-        if ($form_filter && isset($s['form_id'])) {
-            $pass = $pass && ($s['form_id'] == $form_filter);
-        }
-        // Month Filter
+        if ($form_filter && isset($s['form_id'])) $pass = $pass && ($s['form_id'] == $form_filter);
         if ($month_filter && !empty($s['submitted_at'])) {
             $month = date('Y-m', strtotime($s['submitted_at']));
             $pass = $pass && ($month == $month_filter);
         }
-        // User Type Filter
-        if ($user_type_filter === 'guest') $pass = $pass && ($s['user_id'] == 0);
-        if ($user_type_filter === 'user') $pass = $pass && ($s['user_id'] != 0);
-        // Email Search
+        if ($user_type_filter === 'guest') $pass = $pass && (($s['user_id'] ?? 0) == 0);
+        if ($user_type_filter === 'user') $pass = $pass && (($s['user_id'] ?? 0) != 0);
         if ($email_search) $pass = $pass && (strpos(strtolower($s['data']['email'] ?? ''), strtolower($email_search)) !== false);
-
         return $pass;
     });
 
@@ -88,7 +83,6 @@ function ucf7e_render_submissions_page() {
             </select>
 
             <input type="text" name="email_search" value="<?php echo esc_attr($email_search); ?>" placeholder="<?php esc_attr_e('Search Email','nahian-ultimate-cf7-elementor'); ?>">
-
             <button type="submit" class="button"><?php esc_html_e('Filter','nahian-ultimate-cf7-elementor'); ?></button>
         </form>
 
@@ -109,14 +103,16 @@ function ucf7e_render_submissions_page() {
                 </thead>
                 <tbody>
                     <?php if(empty($filtered_submissions)): ?>
-                        <tr><td colspan="8"><?php esc_html_e('No submissions found.','nahian-ultimate-cf7-elementor'); ?></td></tr>
+                        <tr>
+                            <td colspan="8"><?php esc_html_e('No submissions found.','nahian-ultimate-cf7-elementor'); ?></td>
+                        </tr>
                     <?php else: foreach($filtered_submissions as $idx=>$s):
-                        $form_title = $s['form_title'] ?? '';
-                        $name = $s['data']['name'] ?? '';
-                        $email = $s['data']['email'] ?? '';
+                        $form_title = $s['form_title'] ?? '-';
+                        $name = $s['data']['name'] ?? '-';
+                        $email = $s['data']['email'] ?? '-';
                         $submitted = !empty($s['submitted_at']) ? strtotime($s['submitted_at']) : 0;
-                        $date = $submitted ? date_i18n('j F Y', $submitted) : '';
-                        $time = $submitted ? date_i18n('g:ia', $submitted) : '';
+                        $date = $submitted ? date_i18n('j F Y', $submitted) : '-';
+                        $time = $submitted ? date_i18n('g:ia', $submitted) : '-';
                     ?>
                     <tr>
                         <td><input type="checkbox" name="submission_ids[]" value="<?php echo esc_attr($idx); ?>"></td>

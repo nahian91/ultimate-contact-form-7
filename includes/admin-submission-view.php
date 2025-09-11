@@ -2,9 +2,12 @@
 if (!defined('ABSPATH')) exit;
 
 function ucf7e_render_submission_view() {
-    if (!current_user_can('manage_options')) wp_die(__('You are not allowed to access this page.','nahian-ultimate-cf7-elementor'));
+    if (!current_user_can('manage_options')) {
+        wp_die(__('You are not allowed to access this page.','nahian-ultimate-cf7-elementor'));
+    }
 
-    $submissions = ucf7e_get_dummy_submissions();
+    // Load real submissions
+    $submissions = get_option('ucf7e_submissions', []);
     $index = isset($_GET['submission_index']) ? intval($_GET['submission_index']) : -1;
 
     if (!isset($submissions[$index])) {
@@ -47,4 +50,4 @@ function ucf7e_render_submission_view() {
             <a href="<?php echo esc_url(add_query_arg(['page'=>'ucf7e-submissions'], admin_url('admin.php'))); ?>" class="button"><?php esc_html_e('Back to Submissions','nahian-ultimate-cf7-elementor'); ?></a>
         </p>
     </div>
-<?php }
+<?php } 
