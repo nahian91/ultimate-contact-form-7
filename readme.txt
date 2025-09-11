@@ -1,4 +1,4 @@
-=== Ultimate Integration for Contact Form 7 – Elementor Widget ===
+=== Ultimate CF7 Integration – Elementor & Gutenberg with Analytics, Reports & Export ===
 Contributors: nahian91
 Tags: contact form 7, elementor, widget, cf7, form builder, cf7 styler, contact form, responsive form, ajax form
 Requires at least: 5.0
@@ -17,7 +17,9 @@ Integrate Contact Form 7 forms directly into Elementor using a dedicated widget.
 
 == Description ==
 
-**Contact Form 7 Widget for Elementor – Ultimate Integration** allows you to seamlessly add Contact Form 7 forms into Elementor without shortcodes. Select your form, style every element individually, and publish responsive, modern forms in minutes.
+**Contact Form 7 Widget for Elementor – Ultimate Integration** Easily integrate Contact Form 7 with Elementor and Gutenberg while managing form submissions like a pro. Track analytics, generate reports, export submissions to CSV/Excel/PDF, and gain insights from your CF7 forms. 
+Perfect for marketers, agencies, and WordPress site owners who want advanced CF7 functionality in a visual editor.
+
 
 **Pro-Level Features:**
 * Drag & Drop CF7 widget for Elementor

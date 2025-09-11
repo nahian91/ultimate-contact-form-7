@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Ultimate Integration for Contact Form 7 – Elementor Widget
+ * Plugin Name: Ultimate CF7 Integration – Elementor & Gutenberg with Analytics, Reports & Export
  * Plugin URI:  https://wordpress.org/plugins/nahian-ultimate-integration-for-contact-form-7-and-elementor/
  * Description: Add Contact Form 7 forms inside Elementor with a dedicated widget. Select your CF7 form from a dropdown and place it without shortcodes.
  * Version:     1.0.0
@@ -74,6 +74,7 @@ add_action('admin_menu', function() {
 /* =====================
    Include Admin Pages
 ===================== */
+require_once __DIR__ . '/includes/admin-assets.php';
 require_once __DIR__ . '/includes/admin-general.php';
 require_once __DIR__ . '/includes/admin-analytics.php';
 require_once __DIR__ . '/includes/admin-submissions.php';
