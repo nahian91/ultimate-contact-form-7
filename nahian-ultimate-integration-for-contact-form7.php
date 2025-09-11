@@ -14,6 +14,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+define( 'UCF7E_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
 /* =====================
    Load Text Domain
 ===================== */

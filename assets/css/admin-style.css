@@ -1,0 +1,8 @@
+ .ucf7e-wrap { display: flex; flex-direction: column; gap: 20px; }
+        .ucf7e-general { display: flex; gap: 30px; flex-wrap: wrap; }
+        .ucf7e-general-content { flex: 1 1 45%; }
+        .ucf7e-general-support { flex: 1 1 50%; }
+        .form-statistics table { width: 100%; }
+        .single-ucf7e-support ul { list-style: none; padding: 0; }
+        .single-ucf7e-support li { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .copy-btn { cursor: pointer; background: #2271b1; color: #fff; border: none; padding: 2px 8px; border-radius: 3px; }

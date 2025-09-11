@@ -132,10 +132,6 @@ function ucf7e_render_submissions_page() {
             <button type="submit" class="button button-secondary" style="margin-top:10px;"><?php esc_html_e('Delete Selected','nahian-ultimate-cf7-elementor'); ?></button>
         </form>
     </div>
-
-    <!-- DataTables CSS & JS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
     jQuery(document).ready(function($){
         $('#ucf7e-submissions-datatable').DataTable({

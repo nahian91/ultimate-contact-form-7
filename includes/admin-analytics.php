@@ -100,5 +100,36 @@ function ucf7e_render_analytics_page() {
             </div>
         </div>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function(){
+        // Form Chart
+        new Chart(document.getElementById('ucf7e-form-chart').getContext('2d'), {
+            type:'bar',
+            data:{labels:<?php echo wp_json_encode(array_column($top_forms,'title')); ?>,datasets:[{label:'Submissions',data:<?php echo wp_json_encode(array_column($top_forms,'count')); ?>,backgroundColor:'#2271b1',borderRadius:4}]},
+            options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+        });
+
+        // Daily Trend
+        new Chart(document.getElementById('ucf7e-date-chart').getContext('2d'), {
+            type:'line',
+            data:{labels:<?php echo wp_json_encode(array_keys($date_stats)); ?>,datasets:[{label:'Submissions per Day',data:<?php echo wp_json_encode(array_values($date_stats)); ?>,borderColor:'#2271b1',backgroundColor:'rgba(34,113,177,0.1)',fill:true,tension:0.3,pointRadius:5}]},
+            options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+        });
+
+        // Day of Week
+        new Chart(document.getElementById('ucf7e-dow-chart').getContext('2d'), {
+            type:'bar',
+            data:{labels:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],datasets:[{label:'Submissions',data:<?php echo wp_json_encode(array_values($day_of_week_stats)); ?>,backgroundColor:'#f39c12',borderRadius:4}]},
+            options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+        });
+
+        // Hour Chart
+        new Chart(document.getElementById('ucf7e-hour-chart').getContext('2d'), {
+            type:'bar',
+            data:{labels:[...Array(24).keys()],datasets:[{label:'Submissions',data:<?php echo wp_json_encode(array_values($hour_stats)); ?>,backgroundColor:'#16a085',borderRadius:4}]},
+            options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+        });
+    });
+    </script>
 <?php
 }
