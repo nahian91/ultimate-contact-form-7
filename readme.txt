@@ -1,4 +1,4 @@
-=== Ultimate CF7 Integration – Elementor & Gutenberg with Analytics, Reports & Export ===
+=== Ultimate CF7 Integration with Analytics, Reports & Export ===
 Contributors: nahian91
 Tags: contact form 7, elementor, widget, cf7, form builder, cf7 styler, contact form, responsive form, ajax form
 Requires at least: 5.0
