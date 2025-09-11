@@ -10,7 +10,7 @@ use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Background;
 
-class UCF7E_Widget_Contact_Form_7 extends Widget_Base {
+class Ultimate_CF7_Widget extends Widget_Base {
 
     public function get_name() {
         return 'ucf7e_contact_form_7';
@@ -25,7 +25,7 @@ class UCF7E_Widget_Contact_Form_7 extends Widget_Base {
     }
 
     public function get_categories() {
-        return [ 'general' ];
+        return [ 'basic' ];
     }
 
     protected function _register_controls() {
