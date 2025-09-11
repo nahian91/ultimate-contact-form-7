@@ -6,15 +6,28 @@ function ucf7e_render_submissions_page() {
         wp_die(__('You are not allowed to access this page.','nahian-ultimate-cf7-elementor'));
     }
 
-    // Load real submissions
+    // Load submissions
     $submissions = get_option('ucf7e_submissions', []);
     $submissions = is_array($submissions) ? $submissions : [];
+
+    // Ensure each submission has a unique ID
+    foreach ($submissions as $key => $s) {
+        if (!isset($s['id'])) {
+            $submissions[$key]['id'] = time() + $key; // simple unique ID
+        }
+    }
+    update_option('ucf7e_submissions', $submissions);
 
     // Handle Bulk Delete
     if (isset($_POST['ucf7e_bulk_action']) && $_POST['ucf7e_bulk_action'] === 'delete') {
         if (!empty($_POST['submission_ids'])) {
-            foreach ($_POST['submission_ids'] as $idx) {
-                unset($submissions[intval($idx)]);
+            foreach ($_POST['submission_ids'] as $id) {
+                foreach ($submissions as $key => $s) {
+                    if (($s['id'] ?? 0) == intval($id)) {
+                        unset($submissions[$key]);
+                        break;
+                    }
+                }
             }
             $submissions = array_values($submissions); // reindex
             update_option('ucf7e_submissions', $submissions);
@@ -99,7 +112,7 @@ function ucf7e_render_submissions_page() {
                 <thead>
                     <tr>
                         <th><input type="checkbox" id="ucf7e_select_all"></th>
-                        <th><?php esc_html_e('S/N','nahian-ultimate-cf7-elementor'); ?></th>
+                        <th><?php esc_html_e('ID','nahian-ultimate-cf7-elementor'); ?></th>
                         <th><?php esc_html_e('Form','nahian-ultimate-cf7-elementor'); ?></th>
                         <th><?php esc_html_e('Name','nahian-ultimate-cf7-elementor'); ?></th>
                         <th><?php esc_html_e('Email','nahian-ultimate-cf7-elementor'); ?></th>
@@ -113,32 +126,18 @@ function ucf7e_render_submissions_page() {
                         <tr>
                             <td colspan="8"><?php esc_html_e('No submissions found.','nahian-ultimate-cf7-elementor'); ?></td>
                         </tr>
-                    <?php else: foreach($filtered_submissions as $idx=>$s):
+                    <?php else: foreach($filtered_submissions as $s):
+                        $id = $s['id'] ?? 0;
                         $form_title = $s['form_title'] ?? '-';
 
-                        // Try multiple keys for Name
-                        $name = $s['data']['your-name']
-                            ?? $s['data']['name']
-                            ?? $s['data']['fullname']
-                            ?? '';
-
-                        // Try multiple keys for Email
-                        $email = $s['data']['your-email']
-                            ?? $s['data']['email']
-                            ?? '';
-
-                        // Universal fallback
+                        $name = $s['data']['your-name'] ?? $s['data']['name'] ?? $s['data']['fullname'] ?? '';
+                        $email = $s['data']['your-email'] ?? $s['data']['email'] ?? '';
                         if (empty($name) && !empty($s['data'])) {
-                            foreach ($s['data'] as $k=>$v) {
-                                if (stripos($k,'name') !== false) { $name = $v; break; }
-                            }
+                            foreach ($s['data'] as $k=>$v) { if (stripos($k,'name')!==false) { $name=$v; break; } }
                         }
                         if (empty($email) && !empty($s['data'])) {
-                            foreach ($s['data'] as $k=>$v) {
-                                if (stripos($k,'mail') !== false) { $email = $v; break; }
-                            }
+                            foreach ($s['data'] as $k=>$v) { if (stripos($k,'mail')!==false) { $email=$v; break; } }
                         }
-
                         $name = $name ?: '-';
                         $email = $email ?: '-';
 
@@ -147,15 +146,15 @@ function ucf7e_render_submissions_page() {
                         $time = $submitted ? date_i18n('g:ia', $submitted) : '-';
                     ?>
                     <tr>
-                        <td><input type="checkbox" name="submission_ids[]" value="<?php echo esc_attr($idx); ?>"></td>
-                        <td><?php echo esc_html($idx+1); ?></td>
+                        <td><input type="checkbox" name="submission_ids[]" value="<?php echo esc_attr($id); ?>"></td>
+                        <td><?php echo esc_html($id); ?></td>
                         <td><?php echo esc_html($form_title); ?></td>
                         <td><?php echo esc_html($name); ?></td>
                         <td><?php echo esc_html($email); ?></td>
                         <td><?php echo esc_html($date); ?></td>
                         <td><?php echo esc_html($time); ?></td>
                         <td>
-                            <a href="<?php echo esc_url(add_query_arg(['page'=>'ucf7e-submission-view','submission_index'=>$idx], admin_url('admin.php'))); ?>" class="button button-primary"><?php esc_html_e('View','nahian-ultimate-cf7-elementor'); ?></a>
+                            <a href="<?php echo esc_url(add_query_arg(['page'=>'ucf7e-submission-view','id'=>$id], admin_url('admin.php'))); ?>" class="button button-primary"><?php esc_html_e('View','nahian-ultimate-cf7-elementor'); ?></a>
                         </td>
                     </tr>
                     <?php endforeach; endif; ?>
@@ -172,7 +171,6 @@ function ucf7e_render_submissions_page() {
             responsive: true
         });
 
-        // Select All Checkbox
         $('#ucf7e_select_all').on('click', function(){
             $('input[name="submission_ids[]"]').prop('checked', this.checked);
         });
