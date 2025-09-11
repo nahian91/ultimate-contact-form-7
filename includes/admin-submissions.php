@@ -78,34 +78,36 @@ function ucf7e_render_submissions_page() {
         <form method="post">
             <?php wp_nonce_field('ucf7e_bulk_action','ucf7e_nonce'); ?>
             <table class="widefat striped">
-                <thead>
-                    <tr>
-                        <td><input type="checkbox" id="select-all"></td>
-                        <th><?php _e('S/N','nahian-ultimate-cf7-elementor'); ?></th>
-                        <th><?php _e('Form','nahian-ultimate-cf7-elementor'); ?></th>
-                        <th><?php _e('Email','nahian-ultimate-cf7-elementor'); ?></th>
-                        <th><?php _e('Submitted At','nahian-ultimate-cf7-elementor'); ?></th>
-                        <th><?php _e('Actions','nahian-ultimate-cf7-elementor'); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if(empty($filtered_submissions)): ?>
-                        <tr><td colspan="6"><?php _e('No submissions found.','nahian-ultimate-cf7-elementor'); ?></td></tr>
-                    <?php else: ?>
-                        <?php $sn = 1; ?>
-                        <?php foreach($filtered_submissions as $id => $s): ?>
-                            <tr>
-                                <td><input type="checkbox" name="submissions[]" value="<?php echo esc_attr($id); ?>"></td>
-                                <td><?php echo $sn++; ?></td>
-                                <td><?php echo esc_html($s['form_title']); ?></td>
-                                <td><?php echo !empty($s['data']['your-email']) ? esc_html($s['data']['your-email']) : __('(no email)','nahian-ultimate-cf7-elementor'); ?></td>
-                                <td><?php echo esc_html($s['submitted_at']); ?></td>
-                                <td><a href="<?php echo admin_url('admin.php?page=ucf7e-submission-view&id='.$id); ?>"><?php _e('View','nahian-ultimate-cf7-elementor'); ?></a></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+    <thead><tr>
+        <td><input type="checkbox" id="select-all"></td>
+        <th><?php _e('S/N'); ?></th>
+        <th><?php _e('Form'); ?></th>
+        <th><?php _e('Email'); ?></th>
+        <th><?php _e('Date'); ?></th>
+        <th><?php _e('Time'); ?></th>
+        <th><?php _e('Actions'); ?></th>
+    </tr></thead>
+    <tbody>
+    <?php if(!$filtered): ?>
+        <tr><td colspan="7"><?php _e('No submissions found.'); ?></td></tr>
+    <?php else: $sn=1; foreach($filtered as $id=>$s): 
+        $timestamp = !empty($s['submitted_at']) ? strtotime($s['submitted_at']) : 0;
+        $date = $timestamp ? date_i18n('j F Y', $timestamp) : '-';
+        $time = $timestamp ? date_i18n('g:ia', $timestamp) : '-';
+    ?>
+        <tr>
+            <td><input type="checkbox" name="submissions[]" value="<?php echo esc_attr($id); ?>"></td>
+            <td><?php echo $sn++; ?></td>
+            <td><?php echo esc_html($s['form_title']); ?></td>
+            <td><?php echo esc_html($s['data']['your-email'] ?? __('(no email)')); ?></td>
+            <td><?php echo esc_html($date); ?></td>
+            <td><?php echo esc_html($time); ?></td>
+            <td><a href="<?php echo admin_url('admin.php?page=ucf7e-submission-view&id='.$id); ?>"><?php _e('View'); ?></a></td>
+        </tr>
+    <?php endforeach; endif; ?>
+    </tbody>
+</table>
+
 
             <p>
                 <input type="submit" name="ucf7e_bulk_delete" class="button button-danger" value="<?php _e('Delete Selected','nahian-ultimate-cf7-elementor'); ?>" />
