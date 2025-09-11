@@ -1,6 +1,9 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+/**
+ * Convert CF7 field names like "your-name" to "Your Name"
+ */
 function ucf7e_format_label($text) {
     $text = str_replace(['-', '_'], ' ', $text);
     return ucwords(strtolower($text));
@@ -11,6 +14,7 @@ function ucf7e_render_submission_view() {
         wp_die(__('You are not allowed to access this page.', 'nahian-ultimate-cf7-elementor'));
     }
 
+    // Load all submissions
     $submissions = get_option('ucf7e_submissions', []);
     $index = isset($_GET['submission_index']) ? intval($_GET['submission_index']) : -1;
 
@@ -20,35 +24,33 @@ function ucf7e_render_submission_view() {
     }
 
     $s = $submissions[$index];
-    $form_title   = $s['form_title'] ?? '';
-    $data         = $s['data'] ?? [];
+
+    // Dynamic Form Title
+    $form_title = $s['form_title'] ?? __('Untitled Form', 'nahian-ultimate-cf7-elementor');
+    $form_label = __('Submission Details', 'nahian-ultimate-cf7-elementor');
+
+    // Submitted Data
+    $data = is_array($s['data']) ? $s['data'] : [];
     $submitted_at = !empty($s['submitted_at']) ? strtotime($s['submitted_at']) : 0;
-    $date         = $submitted_at ? date_i18n('j F Y', $submitted_at) : '';
-    $time         = $submitted_at ? date_i18n('g:ia', $submitted_at) : '';
-    $user_type    = !empty($s['user_id']) ? __('Registered User', 'nahian-ultimate-cf7-elementor') : __('Guest', 'nahian-ultimate-cf7-elementor');
+    $date = $submitted_at ? date_i18n('j F Y', $submitted_at) : '-';
+    $time = $submitted_at ? date_i18n('g:ia', $submitted_at) : '-';
     ?>
 
     <div class="wrap ucf7-wrap">
-        <h1><?php echo esc_html($form_title ?: __('Untitled Form', 'nahian-ultimate-cf7-elementor')); ?> - <?php esc_html_e('Submission Details', 'nahian-ultimate-cf7-elementor'); ?></h1>
+        <h1>
+            <?php echo esc_html($form_title); ?> - <?php echo esc_html($form_label); ?>
+        </h1>
 
         <table class="widefat striped">
             <tbody>
-                <tr>
-                    <th><?php esc_html_e('User Type', 'nahian-ultimate-cf7-elementor'); ?></th>
-                    <td><?php echo esc_html($user_type); ?></td>
-                </tr>
                 <?php if (!empty($data)): ?>
                     <?php foreach ($data as $key => $value): ?>
-                        <?php $label = ucf7e_format_label($key); ?>
                         <tr>
-                            <th><?php echo esc_html($label); ?></th>
+                            <th><?php echo esc_html(ucf7e_format_label($key)); ?></th>
                             <td>
-                                <?php 
+                                <?php
                                 if (is_array($value)) {
-                                    // Check for uploaded files
-                                    foreach ($value as $v) {
-                                        echo esc_html($v) . '<br>';
-                                    }
+                                    echo esc_html(implode(', ', $value));
                                 } else {
                                     echo esc_html($value);
                                 }
@@ -61,6 +63,7 @@ function ucf7e_render_submission_view() {
                         <td colspan="2"><?php esc_html_e('No submission data available.', 'nahian-ultimate-cf7-elementor'); ?></td>
                     </tr>
                 <?php endif; ?>
+
                 <tr>
                     <th><?php esc_html_e('Submitted At', 'nahian-ultimate-cf7-elementor'); ?></th>
                     <td><?php echo esc_html($date . ' ' . $time); ?></td>
