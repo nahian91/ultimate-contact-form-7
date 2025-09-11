@@ -44,15 +44,6 @@ function ucf7e_register_admin_menu() {
         'ucf7e_render_submissions_page'
     );
 
-    add_submenu_page(
-        'ucf7e-general',
-        __( 'Import/Export', 'nahian-ultimate-cf7-elementor' ),
-        __( 'Import/Export', 'nahian-ultimate-cf7-elementor' ),
-        'manage_options',
-        'ucf7e-import-export',
-        'ucf7e_render_import_export_page'
-    );
-
     // Hidden single submission view
     add_submenu_page(
         null,

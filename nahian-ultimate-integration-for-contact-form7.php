@@ -46,7 +46,6 @@ add_action('admin_menu', function() {
         'General'       => ['slug' => 'ucf7e-general',        'callback' => 'ucf7e_render_general_page'],
         'Analytics'     => ['slug' => 'ucf7e-analytics',      'callback' => 'ucf7e_render_analytics_page'],
         'Submissions'   => ['slug' => 'ucf7e-submissions',    'callback' => 'ucf7e_render_submissions_page'],
-        'Import/Export' => ['slug' => 'ucf7e-import-export',  'callback' => 'ucf7e_render_import_export_page'],
         'Reports'       => ['slug' => 'ucf7e-reports',        'callback' => 'ucf7e_render_reports_page'],
     ];
 
@@ -80,7 +79,6 @@ require_once __DIR__ . '/includes/admin-analytics.php';
 require_once __DIR__ . '/includes/admin-submissions.php';
 require_once __DIR__ . '/includes/admin-submission-view.php';
 require_once __DIR__ . '/includes/admin-reports.php';
-require_once __DIR__ . '/includes/admin-import-export.php';
 
 /* =====================
    Dummy Submissions

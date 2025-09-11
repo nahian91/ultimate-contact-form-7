@@ -66,21 +66,6 @@ class UCF7E_Widget_Contact_Form_7 extends Widget_Base {
             ]
         );
 
-        $this->add_control(
-            'ucf7e_prebuilt_template',
-            [
-                'label'   => __( 'Prebuilt Template', 'nahian-ultimate-cf7-elementor' ),
-                'type'    => Controls_Manager::SELECT,
-                'options' => [
-                    'none'     => __( 'None', 'nahian-ultimate-cf7-elementor' ),
-                    'contact'  => __( 'Contact Form', 'nahian-ultimate-cf7-elementor' ),
-                    'feedback' => __( 'Feedback Form', 'nahian-ultimate-cf7-elementor' ),
-                    'quote'    => __( 'Quote Request', 'nahian-ultimate-cf7-elementor' ),
-                ],
-                'default' => 'none',
-            ]
-        );
-
         $this->end_controls_section();
 
         // ---------------- Container ----------------
