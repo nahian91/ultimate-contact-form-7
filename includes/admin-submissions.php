@@ -37,7 +37,7 @@ function ucf7e_render_submissions_page() {
         }
         if ($user_type_filter === 'guest') $pass = $pass && (($s['user_id'] ?? 0) == 0);
         if ($user_type_filter === 'user') $pass = $pass && (($s['user_id'] ?? 0) != 0);
-        if ($email_search) $pass = $pass && (strpos(strtolower($s['data']['email'] ?? ''), strtolower($email_search)) !== false);
+        if ($email_search) $pass = $pass && (strpos(strtolower($s['data']['your-email'] ?? $s['data']['email'] ?? ''), strtolower($email_search)) !== false);
         return $pass;
     });
 
@@ -108,8 +108,33 @@ function ucf7e_render_submissions_page() {
                         </tr>
                     <?php else: foreach($filtered_submissions as $idx=>$s):
                         $form_title = $s['form_title'] ?? '-';
-                        $name = $s['data']['name'] ?? '-';
-                        $email = $s['data']['email'] ?? '-';
+
+                        // Try multiple keys for Name
+                        $name = $s['data']['your-name']
+                            ?? $s['data']['name']
+                            ?? $s['data']['fullname']
+                            ?? '';
+
+                        // Try multiple keys for Email
+                        $email = $s['data']['your-email']
+                            ?? $s['data']['email']
+                            ?? '';
+
+                        // Universal fallback (if name/email still empty, pick first available field)
+                        if (empty($name) && !empty($s['data'])) {
+                            foreach ($s['data'] as $k=>$v) {
+                                if (stripos($k,'name') !== false) { $name = $v; break; }
+                            }
+                        }
+                        if (empty($email) && !empty($s['data'])) {
+                            foreach ($s['data'] as $k=>$v) {
+                                if (stripos($k,'mail') !== false) { $email = $v; break; }
+                            }
+                        }
+
+                        $name = $name ?: '-';
+                        $email = $email ?: '-';
+
                         $submitted = !empty($s['submitted_at']) ? strtotime($s['submitted_at']) : 0;
                         $date = $submitted ? date_i18n('j F Y', $submitted) : '-';
                         $time = $submitted ? date_i18n('g:ia', $submitted) : '-';
