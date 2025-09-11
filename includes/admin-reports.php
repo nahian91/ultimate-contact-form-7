@@ -34,26 +34,6 @@ function ucf7e_render_reports_page() {
 
     // Quick stats
     $total = count($filtered_submissions);
-
-    // Handle CSV export
-    if (isset($_GET['ucf7_export_csv']) && $_GET['ucf7_export_csv'] == '1') {
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="cf7-submissions-report.csv"');
-        $output = fopen('php://output', 'w');
-        fputcsv($output, ['Form','Name','Email','Message','Submitted At']);
-        foreach ($filtered_submissions as $s) {
-            fputcsv($output, [
-                $s['form_title'] ?? '',
-                $s['data']['name'] ?? '',
-                $s['data']['email'] ?? '',
-                $s['data']['msg'] ?? '',
-                $s['submitted_at'] ?? ''
-            ]);
-        }
-        fclose($output);
-        exit;
-    }
-
     ?>
     <div class="wrap ucf7-wrap">
         <h1><?php esc_html_e('CF7 Reports','nahian-ultimate-cf7-elementor'); ?></h1>
@@ -73,7 +53,6 @@ function ucf7e_render_reports_page() {
             <input type="date" name="ucf7_end_date" value="<?php echo esc_attr($filter_end); ?>" placeholder="<?php esc_attr_e('End Date','nahian-ultimate-cf7-elementor'); ?>">
             <button type="submit" class="button button-primary"><?php esc_html_e('Filter','nahian-ultimate-cf7-elementor'); ?></button>
             <a href="<?php echo esc_url(admin_url('admin.php?page=ucf7e-reports')); ?>" class="button"><?php esc_html_e('Reset','nahian-ultimate-cf7-elementor'); ?></a>
-            <button type="submit" name="ucf7_export_csv" value="1" class="button button-secondary"><?php esc_html_e('Export CSV','nahian-ultimate-cf7-elementor'); ?></button>
         </form>
 
         <!-- Quick Stats -->
@@ -100,13 +79,39 @@ function ucf7e_render_reports_page() {
                 <tbody>
                     <?php if(empty($filtered_submissions)): ?>
                         <tr><td colspan="5"><?php esc_html_e('No submissions found.','nahian-ultimate-cf7-elementor'); ?></td></tr>
-                    <?php else: foreach($filtered_submissions as $s): ?>
+                    <?php else: foreach($filtered_submissions as $s): 
+                        // Name
+                        $name = $s['data']['your-name'] ?? $s['data']['name'] ?? $s['data']['fullname'] ?? '';
+                        if(empty($name) && !empty($s['data'])){
+                            foreach($s['data'] as $k=>$v){
+                                if(stripos($k,'name')!==false){ $name = is_array($v)? implode(', ', $v) : $v; break; }
+                            }
+                        }
+
+                        // Email
+                        $email = $s['data']['your-email'] ?? $s['data']['email'] ?? '';
+                        if(empty($email) && !empty($s['data'])){
+                            foreach($s['data'] as $k=>$v){
+                                if(stripos($k,'mail')!==false){ $email = is_array($v)? implode(', ', $v) : $v; break; }
+                            }
+                        }
+
+                        // Message
+                        $message = $s['data']['your-message'] ?? $s['data']['message'] ?? $s['data']['msg'] ?? '';
+                        if(empty($message) && !empty($s['data'])){
+                            foreach($s['data'] as $k=>$v){
+                                if(stripos($k,'msg')!==false || stripos($k,'message')!==false){ $message = is_array($v)? implode(', ', $v) : $v; break; }
+                            }
+                        }
+
+                        $submitted = !empty($s['submitted_at']) ? $s['submitted_at'] : '';
+                    ?>
                     <tr>
                         <td><?php echo esc_html($s['form_title'] ?? ''); ?></td>
-                        <td><?php echo esc_html($s['data']['name'] ?? ''); ?></td>
-                        <td><?php echo esc_html($s['data']['email'] ?? ''); ?></td>
-                        <td><?php echo esc_html($s['data']['msg'] ?? ''); ?></td>
-                        <td><?php echo esc_html($s['submitted_at'] ?? ''); ?></td>
+                        <td><?php echo esc_html($name); ?></td>
+                        <td><?php echo esc_html($email); ?></td>
+                        <td><?php echo esc_html($message); ?></td>
+                        <td><?php echo esc_html($submitted); ?></td>
                     </tr>
                     <?php endforeach; endif; ?>
                 </tbody>
